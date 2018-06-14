@@ -53,5 +53,11 @@ def add_user():
 
 	return jsonify(result)
 
+# endpoint to get user details by id
+@app.route("/user/<id>", methods=["GET"])
+def user_detail(id):
+	user = User.query.get(id)
+	return user_schema.jsonify(user)
+
 if __name__ == '__main__':
     app.run(debug=True)
