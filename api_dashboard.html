@@ -48,7 +48,7 @@ $(document).ready(function(){
 		for (var i = document.getElementById("listOfUsers").rows.length; i > 1; i--) {
    			document.getElementById("listOfUsers").deleteRow(i - 1);
 		}
-
+		
 		$.ajax({
 			url: 'http://127.0.0.1:5000/user',
 			type: "GET",
@@ -74,8 +74,8 @@ $(document).ready(function(){
 	$("#POST").click(function(){
 
 		// VARIABLES
-		var username = $('#username').val()
-		var email = $('#email').val()
+		var username = $('#username').val().toLowerCase();
+		var email = $('#email').val().toLowerCase();
 		var usernameList = [];
 		var emailList = [];
 		var usernameErrorBool = false;
