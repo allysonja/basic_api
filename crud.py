@@ -36,5 +36,22 @@ def get_user():
 	result = users_schema.dump(all_users)
 	return jsonify(result.data)
 
+# endpoint to create new user
+@app.route("/user", methods=["POST"])
+def add_user():
+	username = request.json['username']
+	email = request.json['email']
+
+	username = username.lower()
+	email = email.lower()
+
+	new_user = User(username, email)
+	result = user_schema.dump(new_user)
+
+	db.session.add(new_user)
+	db.session.commit()
+
+	return jsonify(result)
+
 if __name__ == '__main__':
     app.run(debug=True)
