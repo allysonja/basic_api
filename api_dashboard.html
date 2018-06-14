@@ -24,6 +24,8 @@
 <br>
 <button id="POST">POST</button>
 
+<p id="successfulSubmit" style="display: hidden;"></p>
+
 <script>
 $(document).ready(function(){
 
@@ -40,7 +42,9 @@ $(document).ready(function(){
 			dataType: "json",
 			data: JSON.stringify({username: username, email: email}),
 			success: function (response) {
-				console.log(response);
+				// console.log(response);
+				$("#successfulSubmit").html("Successful Submit");
+				successfulSubmit.style.display = 'block';
 			}
 		});
 	});
