@@ -15,6 +15,15 @@
 
 <body>
 
+<h4>Show all users</h4>
+
+<table id="listOfUsers">
+	<tr>
+		<th>Username</th>
+		<th>Email</th>
+	</tr>
+</table>
+
 <h4>Create new user</h4>
 <p>Username</p>
 <input id="username" type="text" placeholder="username">
@@ -28,6 +37,20 @@
 
 <script>
 $(document).ready(function(){
+
+	$.ajax({
+		url: 'http://127.0.0.1:5000/user',
+		type: "GET",
+		success: function (response) {
+			function display(response) {
+			   return '<tr><td>'+response.username+'</td><td>'+response.email+'</td></tr>'
+			}
+			function show_info(details) {
+			   $("#listOfUsers").append(details)
+			} 
+			response.map(display).forEach(show_info);
+		}
+	});
 
 	$("#POST").click(function(){
 
