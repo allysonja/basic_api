@@ -1,0 +1,4 @@
+
+
+# ignore database files so data isn't transfered with git #
+*.sqlite
