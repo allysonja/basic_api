@@ -59,5 +59,22 @@ def user_detail(id):
 	user = User.query.get(id)
 	return user_schema.jsonify(user)
 
+# endpoint to update user
+@app.route("/user/<id>", methods=["PUT"])
+def user_update(id):
+	user = User.query.get(id)
+	username = request.json['username']
+	email = request.json['email']
+
+	user.username = username
+	user.email = email
+
+	result = user_schema.dump(user)
+
+	db.session
+	db.session.commit()
+
+	return user_schema.jsonify(user)
+
 if __name__ == '__main__':
     app.run(debug=True)
