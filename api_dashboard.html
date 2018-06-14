@@ -37,6 +37,8 @@
 <br>
 <button id="POST">POST</button>
 
+<p id="usernameError" style="display: hidden;"></p>
+<p id="emailError" style="display: hidden;"></p>
 <p id="successfulSubmit" style="display: hidden;"></p>
 
 <script>
@@ -46,7 +48,7 @@ $(document).ready(function(){
 		for (var i = document.getElementById("listOfUsers").rows.length; i > 1; i--) {
    			document.getElementById("listOfUsers").deleteRow(i - 1);
 		}
-		
+
 		$.ajax({
 			url: 'http://127.0.0.1:5000/user',
 			type: "GET",
@@ -72,21 +74,77 @@ $(document).ready(function(){
 	$("#POST").click(function(){
 
 		// VARIABLES
-		var username = $('#username').val().toLowerCase();
-		var email = $('#email').val().toLowerCase();
+		var username = $('#username').val()
+		var email = $('#email').val()
+		var usernameList = [];
+		var emailList = [];
+		var usernameErrorBool = false;
+		var emailErrorBool = false;
+
+		usernameError.style.display = 'none';
+		emailError.style.display = 'none';
+		successfulSubmit.style.display = 'none';
 
 		$.ajax({
-			url: 'http://127.0.0.1:5000/user',
-			type: "POST",
-			contentType: "application/json; charset=utf-8",
-			dataType: "json",
-			data: JSON.stringify({username: username, email: email}),
+			url: 'http://127.0.0.1:5000/userlist',
+			type: "GET",
 			success: function (response) {
 				// console.log(response);
-				$("#successfulSubmit").html("Successful Submit");
-				successfulSubmit.style.display = 'block';
+				usernameList = response;
+
+				// DEBUGGING
+				// console.log(username);
+				// console.log(usernameList.indexOf(username));
+
+				if (jQuery.inArray(username, usernameList) != '-1') {
+					$("#usernameError").html("Username is already taken");
+					usernameError.style.display = 'block';
+					usernameErrorBool = true;
+				}
+
 			}
 		});
+				
+		$.ajax({
+			url: 'http://127.0.0.1:5000/emaillist',
+			type: "GET",
+			success: function (response) {
+				// console.log(response);
+				emailList = response
+				// DEBUGGING
+				// console.log(email);
+				// console.log(jQuery.inArray(email, emailList));
+
+				if (jQuery.inArray(email, emailList) != '-1') {
+					$("#emailError").html("Email is already taken");
+					emailError.style.display = 'block';
+					emailErrorBool = true;
+				}
+			}
+		});
+
+		// set timeout so ajax calls can finish before the if statement is considered
+
+		setTimeout(timeOut(), 100);
+		function timeOut() {
+
+		}
+
+		if (usernameErrorBool == false && emailErrorBool == false) {
+			$.ajax({
+				url: 'http://127.0.0.1:5000/user',
+				type: "POST",
+				contentType: "application/json; charset=utf-8",
+				dataType: "json",
+				data: JSON.stringify({username: username, email: email}),
+				success: function (response) {
+					// console.log(response);
+					$("#successfulSubmit").html("Successful Submit");
+					successfulSubmit.style.display = 'block';
+				}
+			});
+		}
+
 	});
 });
 

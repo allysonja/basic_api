@@ -85,5 +85,25 @@ def user_delete(id):
 
 	return user_schema.jsonify(user)
 
+# endpoint to get list of usernames in database
+@app.route("/userlist", methods=["GET"])
+def user_list():
+	sqlquery = "SELECT username FROM user"
+	all_usernames = db.engine.execute(sqlquery)
+	result = []
+	for row in all_usernames:
+		result.append(row[0])
+	return jsonify(result)
+
+# endpoint to get list of emails in database
+@app.route("/emaillist", methods=["GET"])
+def email_list():
+	sqlquery = "SELECT email FROM user"
+	all_emails = db.engine.execute(sqlquery)
+	result = []
+	for row in all_emails:
+		result.append(row[0])
+	return jsonify(result)
+
 if __name__ == '__main__':
     app.run(debug=True)
